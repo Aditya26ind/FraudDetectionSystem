@@ -4,7 +4,7 @@ Lightweight real‑time fraud demo using Kafka events, a Python worker with a sm
 
 ## What it does
 - API publishes transactions to Kafka.
-- Worker consumes, scores with a logistic regression model (trained from `data/transactions.csv`), and writes decision + score to Redis/Postgres/S3.
+- Worker consumes, scores with a  model (trained from `data/transactions.csv`), and writes decision + score to Redis/Postgres/S3.
 - API lets you check the decision.
 
 ## Core components
