@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 from datetime import datetime
 
+from common.s3_client import get_s3_client
 from fastapi import APIRouter, HTTPException
 from aiokafka import AIOKafkaProducer
 
@@ -35,7 +36,18 @@ async def shutdown_event():
 
 
 def _load_row(csv_row_number: int | None):
-    path = Path("data/transactions.csv")
+    
+    s3_client = get_s3_client()
+    path = pd.read_csv(f"s3://{settings.s3_bucket}/transactions.csv")
+    
+    #if no file named as transactions.csv is found , save it from local to s3
+    if path is None:
+        local_path = Path(__file__).resolve().parent.parent.parent / "data" / "transactions.csv"
+        if not local_path.exists():
+            raise HTTPException(status_code=404, detail="Local transactions.csv not found")
+        s3_client.upload_file(str(local_path), settings.s3_bucket, "transactions.csv")
+        path = pd.read_csv(f"s3://{settings.s3_bucket}/transactions.csv")
+    # path = Path("data/transactions.csv")
     if not path.exists():
         raise HTTPException(status_code=404, detail="transactions.csv not found")
     df = pd.read_csv(path)
