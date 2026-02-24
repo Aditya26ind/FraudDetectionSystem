@@ -39,6 +39,7 @@ curl "http://localhost:8000/transaction/demo1/status?wait_seconds=5"
 - Trained on first run from `data/transactions.csv`.
 - Simple features: amount, balances, flag, type (one‑hot).
 - Thresholds: `prob>=0.8 → BLOCK`, `>=0.5 → FLAG`, else APPROVE; upstream `isFlaggedFraud=1` always BLOCK.
+- Used GradientBoostingClassifier for training as it have non linear approach.
 
 ## Daily report
 `python batch/daily_reports.py` — counts APPROVE/FLAG/BLOCK from Postgres for today.

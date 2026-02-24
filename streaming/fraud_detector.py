@@ -73,7 +73,6 @@ async def fraud_detector():
         consumer = AIOKafkaConsumer(
             settings.kafka_fraud_topic,
             bootstrap_servers=settings.kafka_bootstrap,
-            # Deserialize manually in loop so a single bad record doesn't kill the consumer
             auto_offset_reset='latest',
             group_id="fraud-detector",
         )
