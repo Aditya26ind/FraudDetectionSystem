@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json
 import logging
+from datetime import datetime
 import psycopg2
 from psycopg2.extras import Json
 from common.config import get_settings
@@ -51,6 +52,23 @@ def ensure_transactions_table(conn) -> None:
 def insert_transaction(conn, record: dict) -> None:
     with conn.cursor() as cur:
         logging.info(f"Inserting transaction {record.get('transaction_id')} into database")
+
+        processed_at = record.get("processed_at")
+        if isinstance(processed_at, str):
+            try:
+                processed_at_dt = datetime.fromisoformat(processed_at)
+            except ValueError:
+                processed_at_dt = None
+        elif isinstance(processed_at, datetime):
+            processed_at_dt = processed_at
+        else:
+            processed_at_dt = None
+
+        raw_payload = {
+            **record,
+            "processed_at": processed_at_dt.isoformat() if isinstance(processed_at_dt, datetime) else processed_at,
+        }
+
         cur.execute(
             """
             INSERT INTO transactions (
@@ -77,7 +95,7 @@ def insert_transaction(conn, record: dict) -> None:
                 record.get("decision"),
                 record.get("fraud_score"),
                 Json(record.get("reasons")),
-                record.get("processed_at"),
-                Json(record),
+                processed_at_dt,
+                Json(raw_payload),
             ),
         )

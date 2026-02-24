@@ -1,1 +1,53 @@
 data/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data files (large datasets should not be versioned)
+data/
+*.csv
+*.tsv
+*.json
+*.parquet
+
+# Model files (saved models, weights, etc.)
+models/
+# *.pkl
+*.joblib
+*.h5
+*.ckpt
+
+# Logs and outputs
+logs/
+*.log
+*.out
+*.err
+
+# Cache and temporary files
+*.cache
+*.tmp
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/project settings
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Build / distribution
+build/
+dist/
+*.egg-info/

@@ -35,60 +35,7 @@ def get_or_train_model() -> Pipeline:
     }
 
 
-def train_model() -> Pipeline:
 
-    # in deployment we would add .csv file in database
-    data_path = Path(
-        __file__).resolve().parent.parent / "data" / "transactions.csv"
-    df = pd.read_csv(data_path)
-
-    X = df[MODEL_FEATURES]
-    y = df["isFraud"]
-
-    preprocess = ColumnTransformer(
-        [
-            ("cat", OneHotEncoder(handle_unknown="ignore"), ["type"]),
-            (
-                "num",
-                "passthrough",
-                [
-                    "amount", "oldbalanceOrg", "newbalanceDest",
-                    "isFlaggedFraud"
-                ],
-            ),
-        ],
-        remainder="drop",
-    )
-
-    # LogisticRegression
-    # model = Pipeline([
-    #     ("prep", preprocess),
-    #     (
-    #         "clf",
-    #         LogisticRegression(
-    #             max_iter=200,
-    #             class_weight="balanced",
-    #             solver="lbfgs",
-    #             n_jobs=1,
-    #         ),
-    #     ),
-    # ])
-
-    # GradientBoostingClassifier
-    model = Pipeline([
-        ("prep", preprocess),
-        ("clf",
-         GradientBoostingClassifier(n_estimators=300,
-                                    learning_rate=0.05,
-                                    max_depth=5,
-                                    random_state=42)),
-    ])
-
-    model.fit(X, y)
-
-    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump(model, MODEL_PATH)
-    return model
 
 
 def build_feature_row(transaction: dict) -> pd.DataFrame:

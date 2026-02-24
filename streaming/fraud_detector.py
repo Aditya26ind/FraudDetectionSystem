@@ -179,4 +179,3 @@ async def stop_fraud_worker():
 if __name__ == "__main__":
     asyncio.run(fraud_detector())
 
-
