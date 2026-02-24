@@ -11,7 +11,8 @@
    - Postgres: full history.  
    - MinIO/S3: JSON copy for audit.
 
-4) **API read path**  
+4) **API read path** 
+   - `POST /transaction/create create events simulation using row number and data.
    - `GET /transaction/{id}/status` polls Redis for the decision.  
    - `GET /stats` aggregates counters from Redis.
 
